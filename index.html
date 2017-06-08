@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VUE-game</title>
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="app">
+		<div class="player">
+			<h2>{{ player.name }}</h2>
+			<div class="health">
+				<span :style="{ width: player.health + '%', backgroundColor: healthColor(player) }">
+					{{ player.health }}
+				</span>
+			</div>
+		</div>
+		<div class="monster">
+			<h2>{{ enemy.name }}</h2>
+			<div class="health">
+				<span :style="{ width: enemy.health + '%', backgroundColor: healthColor(enemy) }">
+					{{ enemy.health }}
+				</span>
+			</div>
+		</div>
+
+		<div class="actions">
+			<template v-if="visible">
+				<button class="btn-info" v-on:click="newGame">start new game</button>
+			</template>
+			<template v-if="!visible">
+				<button class="btn-danger" v-on:click="attack">attack</button>
+				<button class="btn-success" v-on:click="heal">heal</button>
+				<button v-on:click="giveUp">give up</button>
+			</template>
+		</div>
+
+		<div class="logs">
+			<ul class="ya">
+				<li v-for="log in logs.playerAttack">
+					You hit enemy with {{ log }}%
+				</li>
+			</ul>
+			<ul class="ea">
+				<li v-for="log in logs.enemyAttack">
+					Enemy hit you with {{ log }}%
+				</li>
+			</ul>
+			<ul class="h">
+				<li v-for="log in logs.playerHeal">
+					You hilled with {{ log }}%
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<script src="vue.js"></script>
+	<script>
+		var game = new Vue ({
+			el: '#app',
+			data: {
+				player: {
+					name: 'Player',
+					health: 0,
+				},
+				enemy: {
+					name: 'Enemy',
+					health: 0,
+				},
+				logs: {
+					playerAttack: [],
+					playerHeal: [],
+					enemyAttack: []
+				},
+				visible: true,
+			},
+			mounted() {
+				this.enterName();
+			},
+			methods: {
+				enterName: function() {
+					var person = prompt("Please enter your name", this.player.name);
+					person = person != null ? person : "Player";
+				},
+				newGame: function() {
+					this.player.health = 100;
+					this.enemy.health = 100;
+					this.buttonStatus();
+					this.logs.playerAttack = [];
+					this.logs.playerHeal = [];
+					this.logs.enemyAttack = [];
+				},
+				attack: function () {
+					var playerDamage = Math.floor((Math.random() * 10) + 1),
+						enemyDamage = Math.floor((Math.random() * 10) + 1);
+					this.player.health = this.player.health - enemyDamage;
+					this.enemy.health = this.enemy.health - playerDamage;
+					this.logs.playerAttack.push(playerDamage);
+					this.logs.enemyAttack.push(enemyDamage);
+					this.destroyed();
+				},
+				heal: function () {
+					var heal;
+					var enemyDamage = Math.floor((Math.random() * 10) + 1);
+					if ( this.player.health <= 90 ) {
+						heal = Math.floor((Math.random() * 10) + 1);
+					}
+					else {
+						heal = 0;
+					}
+					this.player.health = this.player.health + heal - enemyDamage;
+					this.logs.enemyAttack.push(enemyDamage);
+					this.logs.playerHeal.push(heal);
+					this.destroyed();
+				},
+				giveUp: function () {
+					alert('You are looser!');
+					this.buttonStatus();
+				},
+				healthColor: function(id) {
+					if (id.health <= 33) {
+						return 'red';
+					}
+					else if (id.health <=66) {
+						return 'orange'
+					}
+					return 'green';
+				},
+				buttonStatus: function () {
+					this.visible = !this.visible;
+				},
+				destroyed: function() {
+					if ( this.player.health <= 0 ) {
+						this.player.health = 0;
+						this.buttonStatus();
+						setTimeout(function() {
+							alert('You lose, motherfucker!');
+						}, 500);
+					}
+					else if ( this.enemy.health <= 0 ) {
+						this.enemy.health = 0;
+						this.buttonStatus();
+						setTimeout(function() {
+							alert('Lucky bastard, you win!');
+						}, 500);
+					}
+				},
+			}
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+body {
+	padding: 50px;
+}
+.player, .monster {
+	display: inline-block;
+	width: 49%;
+}
+.health {
+	position: relative;
+	width: 100%;
+	height: 30px;
+	border: 1px solid #eee;
+}
+.health span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background-color: green;
+	line-height: 30px;
+	padding: 0 10px;
+	box-sizing: border-box;
+	color: #fff;
+	transition: 0.3s;
+}
+
+.actions {
+	margin-top: 30px;
+	text-align: center;
+}
+.logs ul {
+	margin: 30px 0 0;
+	display: inline-block;
+	width: 25%;
+	vertical-align: top;
+}
+ul li {
+	display: block;
+	padding: 3px 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+}
+ul.ya li {
+	background-color: rgba(75,225,0,0.25);
+}
+ul.ea li {
+	background-color: rgba(225,0,0,0.25);
+}
+ul.h li {
+	background-color: rgba(0,78,225,0.25);
+}
+
+button {
+	border: none;
+	box-shadow: none;
+	padding: 5px 20px;
+	border-radius: 8px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.btn-success {
+	background-color: green;
+	color: #fff;
+}
+.btn-danger {
+	background-color: red;
+	color: #fff;
+}
+.btn-info {
+	background-color: lightblue;
+}
